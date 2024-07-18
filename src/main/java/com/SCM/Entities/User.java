@@ -6,6 +6,8 @@ import java.util.List;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
@@ -52,6 +54,7 @@ public class User {
 
     // Self,google,github,facebook
     @Column(name = "Provider")
+    @Enumerated(value = EnumType.STRING)
     private Providers provider = Providers.SELF;
     @Column(name = "Provider_user_id")
     private String providerUserId;
