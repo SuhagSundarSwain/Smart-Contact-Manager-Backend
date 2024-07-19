@@ -10,6 +10,8 @@ import jakarta.validation.Valid;
 
 import java.util.Map;
 
+import javax.print.DocFlavor.STRING;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -62,11 +64,10 @@ public class MainController {
     }
 
     @DeleteMapping("/delete-all-user")
-    public ResponseEntity<String> deleteAllUser() {
+    public ResponseEntity<Map<String, String>> deleteAllUser() {
         if (this.userServiceImpl.deleteAllUsers())
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Clear....");
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Something went wrong");
-
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(Map.of("message", "All cleared"));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("message", "Something went wrong"));
     }
 
 }
