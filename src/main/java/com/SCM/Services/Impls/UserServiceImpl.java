@@ -7,10 +7,15 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.SCM.Entities.User;
+import com.SCM.Forms.LoginForm;
 import com.SCM.Helper.AppConstants;
 import com.SCM.Helper.ResourceNotFoundExeption;
 import com.SCM.Repositories.UserRepo;
@@ -25,10 +30,26 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    AuthenticationManager authenticationManager;
+
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
+    public User getLogin(LoginForm loginForm) {
+
+        Authentication authentication = this.authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginForm.getUserName(), loginForm.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        User loggedinUser = (User) authentication.getPrincipal();
+        loggedinUser.setPassword(null);
+        return loggedinUser;
+
+    }
+
+    @Override
     public User saveUser(User user) {
+
         String userId = UUID.randomUUID().toString();
         user.setUserId(userId);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -37,6 +58,7 @@ public class UserServiceImpl implements UserService {
         User result = this.userRepo.save(user);
         result.setPassword(null);
         return result;
+        
     }
 
     @Override
@@ -98,4 +120,5 @@ public class UserServiceImpl implements UserService {
         }
 
     }
+
 }

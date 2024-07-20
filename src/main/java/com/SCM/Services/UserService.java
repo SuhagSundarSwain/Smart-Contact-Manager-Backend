@@ -1,6 +1,8 @@
 package com.SCM.Services;
 
 import com.SCM.Entities.User;
+import com.SCM.Forms.LoginForm;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -19,5 +21,7 @@ public interface UserService {
     boolean isUserExistByEmail(String email);
 
     List<User> getAllUsers();
+
+    User getLogin(LoginForm loginForm);
 
 }

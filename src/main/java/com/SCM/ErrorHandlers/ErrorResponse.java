@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
+import com.SCM.Helper.AppConstants;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,7 +24,7 @@ import lombok.ToString;
 public class ErrorResponse {
 
     private String errorType;
-    private Map<String, String> error;
+    private Object error;
 
     public ErrorResponse(String errorType, BindingResult rBindingResult) {
         this.errorType = errorType;
@@ -30,8 +32,14 @@ public class ErrorResponse {
                 .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));
     }
 
-    public ErrorResponse(String duplicateField) {
-        this.errorType = "Duplicate error entry";
-        this.error = Map.of(duplicateField, duplicateField + " is already in use.");
+    public ErrorResponse(String errorType, String error) {
+        if (errorType == AppConstants.DUPLICATE_ERROR) {
+            this.errorType = errorType;
+            error = error.toLowerCase();
+            this.error = Map.of(error, error + " is already in use.");
+        } else if (errorType == AppConstants.INVALID_CREDENTIAL) {
+            this.errorType = errorType;
+            this.error = error;
+        }
     }
 }
