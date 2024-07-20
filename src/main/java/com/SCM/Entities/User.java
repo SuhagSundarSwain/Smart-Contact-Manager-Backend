@@ -1,10 +1,17 @@
 package com.SCM.Entities;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -27,7 +34,8 @@ import lombok.ToString;
 @AllArgsConstructor
 @Builder
 @ToString
-public class User {
+public class User implements UserDetails {
+
     @Id
     private String userId;
 
@@ -41,18 +49,18 @@ public class User {
     private String about;
     @Column(name = "profilePic")
     private String profilePic;
-    @Column(name = "phone", length = 10)
+    @Column(name = "phone", unique = true)
     private String phoneNumber;
 
-    // information
+    // Information
     @Column(name = "account_active")
-    private boolean enabled = false;
+    private boolean enabled = true;//TODO change this enabled value to false
     @Column(name = "email_verified")
     private boolean emailVerified = false;
     @Column(name = "phone_verified")
     private boolean phoneVerified = false;
 
-    // Self,google,github,facebook
+    // Provider information: Self, Google, GitHub, Facebook
     @Column(name = "Provider")
     @Enumerated(value = EnumType.STRING)
     private Providers provider = Providers.SELF;
@@ -61,5 +69,25 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Contact> contacts = new ArrayList<>();
+
+    @ElementCollection
+    private List<String> roleList = new ArrayList<>();
+
+    /**
+     * Returns the authorities granted to the user.
+     * 
+     * @return a collection of granted authorities
+     */
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roleList.stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public String getUsername() {
+        return this.email;
+    }
 
 }

@@ -21,17 +21,17 @@ import lombok.ToString;
 @Builder
 public class ErrorResponse {
 
-    private String message;
+    private String errorType;
     private Map<String, String> error;
 
-    public ErrorResponse(String message, BindingResult rBindingResult) {
-        this.message = message;
+    public ErrorResponse(String errorType, BindingResult rBindingResult) {
+        this.errorType = errorType;
         this.error = rBindingResult.getFieldErrors().stream()
                 .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));
     }
 
     public ErrorResponse(String duplicateField) {
-        this.message = "Duplicate error entry";
+        this.errorType = "Duplicate error entry";
         this.error = Map.of(duplicateField, duplicateField + " is already in use.");
     }
 }
