@@ -3,7 +3,7 @@ package com.SCM.Controllers;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.SCM.Entities.User;
-import com.SCM.ErrorHandlers.ErrorResponse;
+import com.SCM.ErrorResponse.ErrorResponse;
 import com.SCM.Forms.LoginForm;
 import com.SCM.Forms.UserForm;
 import com.SCM.Helper.AppConstants;
