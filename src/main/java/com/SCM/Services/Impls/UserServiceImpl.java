@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
         User result = this.userRepo.save(user);
         result.setPassword(null);
         return result;
-        
+
     }
 
     @Override

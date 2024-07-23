@@ -10,15 +10,17 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import com.SCM.Filters.JwtRequestFilter;
 import com.SCM.Services.Impls.SecurityCustomUserDetailService;
-
 import java.util.Arrays;
 
 @Configuration
@@ -27,6 +29,9 @@ public class SecurityConfig {
 
     @Autowired
     private SecurityCustomUserDetailService securityCustomUserDetailService;
+
+    @Autowired
+    private JwtRequestFilter jwtRequestFilter;
 
     /**
      * // FOR IN MEMORY
@@ -71,15 +76,17 @@ public class SecurityConfig {
      */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        
+
         httpSecurity
                 .authorizeHttpRequests(authorize -> {
                     authorize.requestMatchers("/user/**").authenticated();
                     authorize.anyRequest().permitAll();
                 })
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .csrf(csrf -> csrf.disable()) // Disable CSRF protection
                 .cors(Customizer.withDefaults())
-                .formLogin(formLogin -> formLogin.disable());
+                .formLogin(formLogin -> formLogin.disable())
+                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
         /**
          * httpSecurity.authorizeHttpRequests(authorize -> {

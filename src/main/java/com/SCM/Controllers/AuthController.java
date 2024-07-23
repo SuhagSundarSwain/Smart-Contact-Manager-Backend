@@ -9,7 +9,10 @@ import com.SCM.Forms.UserForm;
 import com.SCM.Helper.AppConstants;
 import com.SCM.Services.Impls.UserServiceImpl;
 import com.SCM.SuccessResponse.LoginResponse;
+import com.SCM.Utils.JwtUtil;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
 import java.util.Map;
@@ -29,6 +32,9 @@ public class AuthController {
 
     @Autowired
     private UserServiceImpl userServiceImpl;
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     /**
      * Handles user registration.
@@ -79,7 +85,7 @@ public class AuthController {
      * @return a response entity with the user ID upon successful authentication
      */
     @PostMapping("/login")
-    public ResponseEntity<Object> userLogin(@Valid @RequestBody LoginForm loginForm, BindingResult rBindingResult) {
+    public ResponseEntity<Object> userLogin(@Valid @RequestBody LoginForm loginForm, BindingResult rBindingResult,HttpServletResponse response) {
         if (rBindingResult.hasErrors())
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ErrorResponse(AppConstants.VALIDATION_ERROR, rBindingResult));
@@ -87,7 +93,16 @@ public class AuthController {
         try {
 
             User user = this.userServiceImpl.getLogin(loginForm);
-            return ResponseEntity.status(HttpStatus.OK).body(new LoginResponse(user.getUserId()));
+
+            String jwtToken = jwtUtil.generateToken(user.getUsername());
+
+            Cookie cookie = new Cookie("JWT",jwtToken);
+            cookie.setHttpOnly(true);
+            cookie.setMaxAge(60*60);
+
+            response.addCookie(cookie);
+
+            return ResponseEntity.status(HttpStatus.OK).body(new LoginResponse(user.getUsername(), jwtToken));
 
         } catch (BadCredentialsException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)

@@ -8,9 +8,11 @@ import lombok.Setter;
 public class LoginResponse {
 
     private String userId;
+    private String jwtToken;
 
-    public LoginResponse(String userId) {
+    public LoginResponse(String userId, String jwtToken) {
         this.userId = userId;
+        this.jwtToken = jwtToken;
     }
 
 }
