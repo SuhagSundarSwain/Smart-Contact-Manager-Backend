@@ -40,7 +40,10 @@ public class AppConstants {
 
     public static final String DUPLICATE_EMAIL_ERROR_CODE = "UK6dotkott2kjsp8vw4d0m25fb7";
 
-    public static final String DUPLICATE_PASSWORD_ERROR_CODE = "UKdu5v5sr43g5bfnji4vb8hg5s3";
+    public static final String DUPLICATE_PHONE_NUMBER_ERROR_CODE = "UKdu5v5sr43g5bfnji4vb8hg5s3";
+
+    // ON add contacts
+    public static final String DUPLICATE_PHONE_NUMBER_ADDED_ERROR_CODE = "UKenp91h8doljyyrct7lqmbgjr8";
 
     /*
      * Invalid Credential messages.

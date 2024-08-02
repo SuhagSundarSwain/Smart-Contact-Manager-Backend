@@ -65,7 +65,7 @@ public class AuthController {
                 return ResponseEntity.status(HttpStatus.CONFLICT)
                         .body(new ErrorResponse(AppConstants.DUPLICATE_ERROR,
                                 AppConstants.DUPLICATE_ERROR_FIELD_EMAIL));
-            else if (e.getMessage().contains(AppConstants.DUPLICATE_PASSWORD_ERROR_CODE))
+            else if (e.getMessage().contains(AppConstants.DUPLICATE_PHONE_NUMBER_ERROR_CODE))
                 return ResponseEntity.status(HttpStatus.CONFLICT)
                         .body(new ErrorResponse(AppConstants.DUPLICATE_ERROR,
                                 AppConstants.DUPLICATE_ERROR_FIELD_PHONE));
@@ -85,7 +85,8 @@ public class AuthController {
      * @return a response entity with the user ID upon successful authentication
      */
     @PostMapping("/login")
-    public ResponseEntity<Object> userLogin(@Valid @RequestBody LoginForm loginForm, BindingResult rBindingResult,HttpServletResponse response) {
+    public ResponseEntity<Object> userLogin(@Valid @RequestBody LoginForm loginForm, BindingResult rBindingResult,
+            HttpServletResponse response) {
         if (rBindingResult.hasErrors())
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ErrorResponse(AppConstants.VALIDATION_ERROR, rBindingResult));
@@ -96,9 +97,9 @@ public class AuthController {
 
             String jwtToken = jwtUtil.generateToken(user.getUsername());
 
-            Cookie cookie = new Cookie("JWT",jwtToken);
+            Cookie cookie = new Cookie("JWT", jwtToken);
             cookie.setHttpOnly(true);
-            cookie.setMaxAge(60*60);
+            cookie.setMaxAge(60 * 60);
 
             response.addCookie(cookie);
 

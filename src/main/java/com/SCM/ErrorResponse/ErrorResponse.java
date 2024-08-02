@@ -34,7 +34,7 @@ public class ErrorResponse {
         if (errorType == AppConstants.DUPLICATE_ERROR) {
             this.errorType = errorType;
             error = error.toLowerCase();
-            this.error = Map.of(error, error + " is already in use.");
+            this.error = Map.of(error, error + " is already exist.");
         } else if (errorType == AppConstants.INVALID_CREDENTIAL) {
             this.errorType = errorType;
             this.error = error;
