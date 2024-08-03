@@ -16,13 +16,13 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @RequestMapping("/user/contacts")
@@ -71,6 +71,13 @@ public class ContactController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
         }
 
+    }
+
+    @GetMapping("/all-contacts")
+    public ResponseEntity<Object> getAllContacts(@AuthenticationPrincipal UserDetails userDetails) {
+        String userEmail = userDetails.getUsername();
+        User user = (User) securityCustomUserDetailService.loadUserByUsername(userEmail);
+        return ResponseEntity.status(HttpStatus.OK).body(user.getContacts());
     }
 
 }
