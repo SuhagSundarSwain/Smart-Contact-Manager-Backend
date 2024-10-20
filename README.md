@@ -73,7 +73,11 @@ To get a local copy up and running, follow these simple steps:
 ## 🎛️ API Documentation
 
 The backend exposes several RESTful APIs for interacting with the application. Check the `src/main/resources/static/swagger-ui.html` for detailed API documentation using Swagger.API documentation is available via Swagger UI at:
+
+```bash
 http://localhost:8080/api-docs
+```
+
 You can explore and test all the available APIs from the Swagger UI interface.
 
 ## ⚙️ Configuration
