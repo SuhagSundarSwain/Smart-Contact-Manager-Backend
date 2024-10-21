@@ -44,9 +44,9 @@ To get a local copy up and running, follow these simple steps:
    Update the `application.properties` file with your database details. Example:
 
    ```properties
-   spring.datasource.url=jdbc:mysql://localhost:3306/your_database
-   spring.datasource.username=your_username
-   spring.datasource.password=your_password
+   spring.datasource.url=jdbc:mysql://localhost:3306/<your_database>
+   spring.datasource.username=<your_username>
+   spring.datasource.password=<your_password>
    spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
    ```
 
