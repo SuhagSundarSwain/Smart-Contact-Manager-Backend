@@ -46,14 +46,16 @@ public class SecurityConfig {
 
         httpSecurity
                 .authorizeHttpRequests(authorize -> {
-                    authorize.requestMatchers("/user/**").authenticated();
+                    authorize.requestMatchers("/user/**","/loginStatus").authenticated();
                     authorize.anyRequest().permitAll();
                 })
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .csrf(csrf -> csrf.disable()) // Disable CSRF protection
                 .cors(Customizer.withDefaults())
                 .formLogin(formLogin -> formLogin.disable())
-                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
+                .logout(logout -> logout.disable());
+
         return httpSecurity.build();
 
     }

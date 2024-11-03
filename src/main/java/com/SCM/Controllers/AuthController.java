@@ -7,6 +7,7 @@ import com.SCM.ErrorResponse.ErrorResponse;
 import com.SCM.Forms.LoginForm;
 import com.SCM.Forms.UserForm;
 import com.SCM.Helper.AppConstants;
+import com.SCM.Helper.SecurityConstants;
 import com.SCM.Services.Impls.UserServiceImpl;
 import com.SCM.SuccessResponse.LoginResponse;
 import com.SCM.Utils.JwtUtil;
@@ -24,6 +25,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -97,7 +99,7 @@ public class AuthController {
 
             String jwtToken = jwtUtil.generateToken(user.getUsername());
 
-            Cookie cookie = new Cookie("JWT", jwtToken);
+            Cookie cookie = new Cookie(SecurityConstants.JWT_COOKIE_NAME, jwtToken);
             cookie.setHttpOnly(true);
             cookie.setMaxAge(60 * 60);
 
@@ -112,6 +114,29 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
 
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Map<String, String>> userLogout(HttpServletResponse response) {
+        Cookie jwtCookie = new Cookie(SecurityConstants.JWT_COOKIE_NAME, "");
+        jwtCookie.setHttpOnly(true);
+        jwtCookie.setMaxAge(0);
+        jwtCookie.setPath("/");
+        response.addCookie(jwtCookie);
+        return ResponseEntity.ok(Map.of("message", "Logout successful"));
+    }
+
+
+    @GetMapping("/loginStatus")
+    public ResponseEntity<Map<String, Boolean>> getMethodName() {
+        return ResponseEntity.ok().body(Map.of("status", true));
+    }
+
+
+    
+    @GetMapping("/test")
+    public String checkLoginStatus() {
+        return "test";
     }
 
     /**
