@@ -1,18 +1,15 @@
 package com.SCM.SuccessResponse;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@AllArgsConstructor
 public class LoginResponse {
 
     private String userId;
     private String jwtToken;
-
-    public LoginResponse(String userId, String jwtToken) {
-        this.userId = userId;
-        this.jwtToken = jwtToken;
-    }
 
 }

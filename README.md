@@ -70,6 +70,13 @@ To get a local copy up and running, follow these simple steps:
    http://localhost:8080
    ```
 
+### Frontend Setup
+
+To access the frontend repository and learn about its setup:
+
+- **Frontend Repo**: [Smart Contact Manager frontend](https://github.com/SuhagSundarSwain/Smart-Contact-Manager-Frontend)
+
+
 ## 🎛️ API Documentation
 
 The backend exposes several RESTful APIs for interacting with the application. Check the `src/main/resources/static/swagger-ui.html` for detailed API documentation using Swagger.API documentation is available via Swagger UI at:
