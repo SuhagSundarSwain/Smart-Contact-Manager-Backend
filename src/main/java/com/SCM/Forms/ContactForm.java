@@ -26,7 +26,7 @@ public class ContactForm {
     private String email;
 
     @Pattern(regexp = "^(\\+91[\\-\\s]?)?(\\d{3}[\\-\\s]?\\d{3}[\\-\\s]?\\d{4})$", message = "Enter a valid phone number.")
-    private String phoneNumber;
+    private String phone;
 
     private String address;
     private String description;

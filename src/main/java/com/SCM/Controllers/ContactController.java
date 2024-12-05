@@ -53,7 +53,7 @@ public class ContactController {
             contact.setAddress(contactForm.getAddress());
             contact.setDescription(contactForm.getDescription());
             contact.setFavorite(contactForm.isFavourite());
-            contact.setPhone(contactForm.getPhoneNumber());
+            contact.setPhone(contactForm.getPhone());
             contact.setUser(user);
 
             Contact savedContact = contactServices.addContact(contact, user);
