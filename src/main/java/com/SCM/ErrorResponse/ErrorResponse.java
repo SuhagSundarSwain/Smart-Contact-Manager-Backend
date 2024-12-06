@@ -38,6 +38,9 @@ public class ErrorResponse {
         } else if (errorType == AppConstants.INVALID_CREDENTIAL) {
             this.errorType = errorType;
             this.error = error;
+        } else {
+            this.errorType = errorType;
+            this.error = error;
         }
     }
 }

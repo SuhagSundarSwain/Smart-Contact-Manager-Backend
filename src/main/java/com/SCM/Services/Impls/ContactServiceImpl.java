@@ -1,8 +1,7 @@
 package com.SCM.Services.Impls;
-
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.SCM.Entities.Contact;
 import com.SCM.Entities.User;
 import com.SCM.Repositories.ContactRepo;
@@ -20,6 +19,19 @@ public class ContactServiceImpl implements ContactService {
         Contact savedContact = contactRepo.save(contact);
 
         return savedContact;
+    }
+
+    @Override
+    public Contact deleteContact(int id) {
+        Optional<Contact> optionalContact = contactRepo.findById(id);
+        if (optionalContact.isPresent()) {
+            Contact contact = optionalContact.get();
+            contactRepo.deleteById(id);
+            return contact;
+        } else {
+            throw new RuntimeException("Contact not found.");
+        }
+
     }
 
 }

@@ -22,7 +22,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
 @RequestMapping("/user/contacts")
@@ -78,6 +80,20 @@ public class ContactController {
         String userEmail = userDetails.getUsername();
         User user = (User) securityCustomUserDetailService.loadUserByUsername(userEmail);
         return ResponseEntity.status(HttpStatus.OK).body(user.getContacts());
+    }
+
+    @DeleteMapping("/contact/{id}")
+    public ResponseEntity<Object> deleteContact(@PathVariable int id) {
+        try {
+            Contact contact = contactServices.deleteContact(id);
+
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(contact);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ErrorResponse(AppConstants.NOT_FOUND, e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
+        }
     }
 
 }
