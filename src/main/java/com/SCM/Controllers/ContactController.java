@@ -15,6 +15,7 @@ import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/user/contacts")
@@ -80,6 +82,24 @@ public class ContactController {
         String userEmail = userDetails.getUsername();
         User user = (User) securityCustomUserDetailService.loadUserByUsername(userEmail);
         return ResponseEntity.status(HttpStatus.OK).body(user.getContacts());
+    }
+
+    @GetMapping("/get-contacts-page")
+    public ResponseEntity<Object> getMethodName(@AuthenticationPrincipal UserDetails userDetails,
+            @RequestParam(defaultValue = "1") int pageNumber, @RequestParam(defaultValue = "5") int pageSize,
+            @RequestParam(defaultValue = "name") String sortBy,
+            @RequestParam(defaultValue = "true") boolean ascending) {
+        try {
+            Page<Contact> pageContact = this.contactServices.getContactByPage(
+                    userDetails,
+                    pageNumber,
+                    pageSize,
+                    sortBy,
+                    ascending);
+            return ResponseEntity.status(HttpStatus.OK).body(pageContact.getContent());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
+        }
     }
 
     @DeleteMapping("/contact/{id}")
