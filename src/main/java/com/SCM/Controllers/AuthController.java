@@ -101,7 +101,9 @@ public class AuthController {
 
             Cookie cookie = new Cookie(SecurityConstants.JWT_COOKIE_NAME, jwtToken);
             cookie.setHttpOnly(true);
-            cookie.setMaxAge(60 * 60);
+            cookie.setMaxAge(24 * 60 * 60 * 1000);
+            cookie.setSecure(true);
+            cookie.setAttribute("SameSite", "None");
 
             response.addCookie(cookie);
 
@@ -122,18 +124,17 @@ public class AuthController {
         jwtCookie.setHttpOnly(true);
         jwtCookie.setMaxAge(0);
         jwtCookie.setPath("/");
+        jwtCookie.setSecure(true);
+        jwtCookie.setAttribute("SameSite", "None");
         response.addCookie(jwtCookie);
         return ResponseEntity.ok(Map.of("message", "Logout successful"));
     }
-
 
     @GetMapping("/loginStatus")
     public ResponseEntity<Map<String, Boolean>> getMethodName() {
         return ResponseEntity.ok().body(Map.of("status", true));
     }
 
-
-    
     @GetMapping("/test")
     public String checkLoginStatus() {
         return "test";

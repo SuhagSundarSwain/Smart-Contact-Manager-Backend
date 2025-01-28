@@ -53,6 +53,9 @@ public class ThemeController {
             Cookie themeCookie = new Cookie(ThemeConstants.THEME, theme.getTheme());
             themeCookie.setHttpOnly(true);
             themeCookie.setPath("/");
+            themeCookie.setSecure(true);
+            themeCookie.setAttribute("SameSite", "None");
+
             response.addCookie(themeCookie);
 
             return ResponseEntity.ok(theme);
